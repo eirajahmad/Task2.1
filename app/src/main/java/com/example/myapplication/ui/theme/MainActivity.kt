@@ -42,13 +42,22 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     textViewResult.text = "Result: $result"
                 }
+            }else if(!isValidForConversion(sourceUnit, value)){
+                editTextValue.error = "Invalid input for $sourceUnit"
+                return@setOnClickListener
             } else {
                 textViewResult.text = "Please enter a valid number"
             }
         }
     }
 
-
+    private fun isValidForConversion(unitType: String, value: Double?): Boolean {
+        // Kelvin should not have a negative value
+        if (unitType == "Kelvin" && value!! < 0.0) {
+            return false
+        }
+        return true
+    }
 
     private fun setupSpinner(spinner: Spinner, arrayId: Int) {
         ArrayAdapter.createFromResource(
@@ -87,6 +96,7 @@ class MainActivity : AppCompatActivity() {
             "Kilograms" to "Tons" -> value / 907.185
 
             // Temperature Conversions
+
             "Celsius" to "Fahrenheit" -> (value * 9/5) + 32
             "Fahrenheit" to "Celsius" -> (value - 32) * 5/9
             "Celsius" to "Kelvin" -> value + 273.15
